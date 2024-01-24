@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: egi-webinar-application-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: egi-sample-app
+  template:
+    metadata:
+      labels:
+        app: egi-sample-app
+    spec:
+      securityContext:
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: egi-webinar-app-container
+        image: cerit.io/xrosinec/egi-webinar-application:v1.1
+        securityContext:
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        ports:
+        - containerPort: 8080
+        env:
+        - name: EGI_WEBINAR_APPLICATION_SECRET
+          value: "Ahoj from the Czech Republic!"
+
+
+
+          

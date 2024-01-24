@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: egi-webinar-application-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - "egi-webinar.xrosinec.dyn.cloud.e-infra.cz"
+      secretName: egi-webinar-xrosinec-dyn-clout-e-infra-cz-tls
+  rules:
+  - host: "egi-webinar.xrosinec.dyn.cloud.e-infra.cz"
+    http:
+      paths:
+      - backend:
+          service:
+            name: egi-webinar-application-service
+            port:
+              number: 8080
+        pathType: ImplementationSpecific
